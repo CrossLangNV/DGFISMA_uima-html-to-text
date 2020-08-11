@@ -1,6 +1,8 @@
 package com.crosslang.uimahtmltotext.service;
 
+import com.crosslang.uimahtmltotext.model.HtmlInput;
+
 public interface UimaTextTransferService {
     String textToHtml(String text);
-    String htmlToText(String html);
+    byte[] htmlToText(HtmlInput input);
 }

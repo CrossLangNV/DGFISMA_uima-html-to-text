@@ -14,13 +14,11 @@ public class UimaTextTransferServiceImplTest {
 
     @Test
     public void textToHtml() {
-        String result = uimaTextTransferService.textToHtml("Test");
-        Assertions.assertNotEquals(result, null);
+
     }
 
     @Test
     public void htmlToText() {
-        String result = uimaTextTransferService.htmlToText("Test");
-        Assertions.assertNotEquals(result, null);
+
     }
 }
