@@ -36,7 +36,8 @@ public class TextTransformerTests {
     public void html2textTest() throws Exception {
         // First view with HTML
         JCas cas = JCasFactory.createJCas();
-        cas.setDocumentText("Hello <html>Test <b class='.nice'>Bo <i> l </b> d </i></html> World");
+        cas.setDocumentText("Hello <html>Test <b class='.nice'>Bo <p><i> l </b> d </i></p></html> World");
+//        cas.setDocumentText("Hello <html>World</html>");
         cas.setDocumentLanguage("en");
 
         AggregateBuilder ab = new AggregateBuilder();
@@ -89,12 +90,13 @@ public class TextTransformerTests {
                 Html2TextTransformer.PARAM_TARGET_VIEW_NAME,
                 "text2htmlView",
                 Html2TextTransformer.PARAM_TYPES_TO_COPY,
-                types);
+                types,
+                Html2TextTransformer.PARAM_REMOVE_OVERLAPPING,
+                false);
         ab.add(tokenToTfidAnnotator, CAS.NAME_DEFAULT_SOFA, "targetViewName");
         ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, "targetViewName");
 
         ab.add(aedDump);
-        //ab.add(CasDumperReadableAnnotator.create("/Users/oanstultjens/dev/output.txt"));
 
         AnalysisEngineDescription aed = ab.createAggregateDescription();
 

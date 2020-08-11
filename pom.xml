@@ -93,6 +93,7 @@
                             <typeSystemIncludes>
                                 <typeSystemInclude>src/main/resources/com/crosslang/uimahtmltotext/uima/types/*.xml</typeSystemInclude>
                             </typeSystemIncludes>
+                            <limitToProject>false</limitToProject>
                         </configuration>
                     </execution>
                 </executions>

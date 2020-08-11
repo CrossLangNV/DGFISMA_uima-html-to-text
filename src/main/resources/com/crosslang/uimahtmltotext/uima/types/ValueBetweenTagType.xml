@@ -29,31 +29,11 @@
                 <featureDescription>
                     <name>attributes</name>
                     <description />
-                    <rangeTypeName>uima.cas.FSArray</rangeTypeName>
-                    <elementType>com.crosslang.uimahtmltotext.uima.type.TagAttribute
-                    </elementType>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
             </features>
         </typeDescription>
 
-        <typeDescription>
-            <name>com.crosslang.uimahtmltotext.uima.type.TagAttribute
-            </name>
-            <description />
-            <supertypeName>uima.tcas.Annotation</supertypeName>
-            <features>
-                <featureDescription>
-                    <name>name</name>
-                    <description></description>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>value</name>
-                    <description></description>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-            </features>
-        </typeDescription>
     </types>
 
 </typeSystemDescription>
