@@ -1,5 +1,9 @@
 package com.crosslang.uimahtmltotext.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.O;
+
 import java.util.Objects;
 
 public class HtmlInput {
@@ -25,6 +29,18 @@ public class HtmlInput {
         return "HtmlInput{" +
                 "text='" + text + '\'' +
                 '}';
+    }
+
+    public String toJson() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonStr = "";
+        try {
+            jsonStr = objectMapper.writeValueAsString(this);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonStr;
     }
 
     @Override

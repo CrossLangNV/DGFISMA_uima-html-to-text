@@ -39,14 +39,14 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
 
         for (HtmlTag s : htmlTagOpeningList) {
             for (HtmlTag e : htmlTagClosingList) {
-                if (e.getTagName().equals(s.getTagName())) {
+                if (e.getTagName().equals(s.getTagName()) && s.getBegin() < e.getEnd()) {
 
                     // Meegeven aan typestocopy
                     ValueBetweenTagType vbtt = new ValueBetweenTagType(aInput);
                     vbtt.setBegin(s.getEnd());
                     vbtt.setEnd(e.getBegin());
-                    vbtt.setText(getDocSubstring(aInput, s.getEnd(), e.getBegin()));
                     vbtt.setTagName(e.getTagName());
+                    vbtt.setText(getDocSubstring(aInput, s.getEnd(), e.getBegin()));
 
                     Map<String, String> tagAttributesMap = new LinkedMap<>();
 
