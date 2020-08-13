@@ -8,7 +8,6 @@ import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiWriter;
 import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import org.apache.commons.io.IOUtils;
-import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
@@ -17,11 +16,15 @@ import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.apache.uima.jcas.JCas;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TARGET_VIEW_NAME;
+import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TYPES_TO_COPY;
+import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_OVERWRITE;
+import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_TARGET_LOCATION;
 
 @Service
 public class UimaTextTransferServiceImpl implements UimaTextTransferService {
@@ -46,12 +49,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
             AnalysisEngineDescription tok = AnalysisEngineFactory.createEngineDescription(OpenNlpSegmenter.class);
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-                    Html2TextTransformer.PARAM_TARGET_VIEW_NAME, "targetViewName", Html2TextTransformer.PARAM_TYPES_TO_COPY, types);
+                    PARAM_TARGET_VIEW_NAME, "targetViewName", PARAM_TYPES_TO_COPY, types);
             AnalysisEngineDescription xmiWriter =
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,
-                            XmiWriter.PARAM_OVERWRITE, true,
-                            XmiWriter.PARAM_TARGET_LOCATION, "./target/cache"
+                            PARAM_OVERWRITE, true,
+                            PARAM_TARGET_LOCATION, "./target/cache"
                     );
 
             ab.add(html);
@@ -72,5 +75,10 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             e.printStackTrace();
         }
         return new byte[0];
+    }
+
+    public void writeCasDumpToFile(JCas cas, String path) throws FileNotFoundException {
+        PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8));
+        CasDumperReadable.dump(cas, printWriter);
     }
 }

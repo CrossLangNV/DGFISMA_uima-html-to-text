@@ -13,13 +13,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This class transforms Text into Html
+ * It reads from the @{@link ValueBetweenTagType} objects how to compose back to HTML
+ */
 public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
-    public static final Logger logger = LoggerFactory.getLogger(TokenToTfidfAnnotator.class);
+    public static final Logger logger = LoggerFactory.getLogger(Text2HtmlTransformer.class);
 
-    /*** Example:
-    * Hello Test Bo  l  d  World
-    * Hello <html>Test <b class='.nice'>Bo <i> l </b> d </i></html> World
-    * */
     @Override
     public void process(JCas aInput, JCas aOutput) throws AnalysisEngineProcessException {
         Collection<ValueBetweenTagType> collection = JCasUtil.select(aInput, ValueBetweenTagType.class);

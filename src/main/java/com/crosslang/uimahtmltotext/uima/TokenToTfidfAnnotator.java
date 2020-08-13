@@ -2,7 +2,6 @@ package com.crosslang.uimahtmltotext.uima;
 
 import cassis.Token;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
-import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
@@ -12,36 +11,35 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class will read @{@link Token} objects, check for their BIO tags, and when a BI (Begin Outside) tag has been
+ * found, it will merge these Tokens into a @{@link Tfidf} object. Which will hold a Term/Concept
+ */
 public class TokenToTfidfAnnotator extends JCasAnnotator_ImplBase {
     public static final Logger logger = LoggerFactory.getLogger(TokenToTfidfAnnotator.class);
 
     @Override
-    public void process(JCas aJCas) throws AnalysisEngineProcessException {
+    public void process(JCas aJCas) {
 
         List<Tfidf> terms = new ArrayList<>();
         List<Token> termBuilder = new ArrayList<>();
 
-        int max = (int) JCasUtil.select(aJCas, Token.class).stream().count();
-
-        logger.info("Max: "+max);
+        int max = countTotalTokens(aJCas);
 
         for (int i=0; i< max; i++) {
             Token token = JCasUtil.selectByIndex(aJCas, Token.class, i);
             if (token.getPos().equals("B")) {
-                logger.info("Found begin of a term. ");
                 termBuilder.add(token);
                 if (max > 1) {
                     for (int j = i + 1; j < max; j++) {
                         Token nextToken = JCasUtil.selectByIndex(aJCas, Token.class, j);
                         if (nextToken.getPos().equals("I")) {
                             termBuilder.add(nextToken);
-                            logger.info("Found middle of a term. ");
                         } else {
                             Tfidf tfidf = new Tfidf(aJCas, token.getBegin(), nextToken.getEnd());
                             terms.add(tfidf);
                             tfidf.addToIndexes();
-                            logger.info("Found end of a term. Term index: " + tfidf.getBegin() + " | " + tfidf.getEnd());
-                            termBuilder.removeAll(termBuilder);
+                            termBuilder.clear();
                             break;
                         }
                     }
@@ -52,5 +50,9 @@ public class TokenToTfidfAnnotator extends JCasAnnotator_ImplBase {
                 }
             }
         }
+    }
+
+    public int countTotalTokens(JCas cas) {
+        return (int) JCasUtil.select(cas, Token.class).stream().count();
     }
 }
