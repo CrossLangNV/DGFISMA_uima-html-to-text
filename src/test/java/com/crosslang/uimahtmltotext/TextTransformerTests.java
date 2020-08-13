@@ -3,8 +3,6 @@ package com.crosslang.uimahtmltotext;
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
 import com.crosslang.sdk.utils.commons.CasDumperReadable;
 import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
-import com.crosslang.uimahtmltotext.model.HtmlInput;
-import com.crosslang.uimahtmltotext.service.UimaTextTransferService;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.NlpAnnotator;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
@@ -36,12 +34,12 @@ public class TextTransformerTests {
 
     @Test
     public void html2textTest() throws Exception {
-        // First view with HTML
         JCas cas = JCasFactory.createJCas();
 //        String txt = "<div id='text' class='panel-body'><div id='textTabContent'><div id='document1' class='tabContent'><div class='tabContent'><div lang=''><div id='banner'><a name='top'></a><div class='bglang'><p class='bglang'><a class='langue' href='../../../editorial/legal_notice.htm' accesskey='8'><b>Avis juridique important</b></a><br></p></div><div class='bgtool'><em class='none'>|</em></div></div><a name='top'></a><h1>31999D0737</h1><p><strong>1999/737/EC: Council Decision of 8 November 1999 appointing Spanish members and alternate members of the Committee of the Regions  </strong><br><em><br>Official Journal L 294 , 17/11/1999 P. 0024 - 0024<br> </em></p><br><div id='TexteOnly'><p><txt_te><p>COUNCIL DECISION</p><p>of 8 November 1999</p><p>appointing Spanish members and alternate members of the Committee of the Regions</p><p>(1999/737/EC)</p><p></p><p>THE COUNCIL OF THE EUROPEAN UNION,</p><p>Having regard to the Treaty establishing the European Community, and in particular Article 263 thereof,</p><p>Having regard to the Council Decision of 26 January 1998(1) appointing the members and alternate members of the Committee of the Regions,</p><p>Whereas seats as members of the Committee of the Regions have become vacant following the resignation of Mr Santiago Lanzuela Marina and Mr Jaume Matas i Palou, members, and Ms María Rosa Estaras Farragut, Ms Ana Gómez Gómez and Mr Emilio del Valle Rodríguez, alternate members, notified to the Council on 1 and 18 October 1999;</p><p>Having regard to the proposal from the Spanish Government,</p><p>HAS DECIDED AS FOLLOWS:</p><p></p><p>Sole Article</p><p>1. Mr Francesc Antich i Oliver and Mr Marcelino Iglesias Ricoui shall be appointed members of the Committee of the Regions in place of Mr Jaume Matas i Palou and Mr Santiago Lanzuela Marina, who have resigned for the remainder of their term of office, which runs until 25 January 2002.</p><p>2. Mr Antonio Garcías i Coll, Mr Joaquín Rivas Rubiales and Mr Juan José Fernández Gómez shall be appointed alternate members of the Committee of the Regions in place of Ms María Rosa Estaras Farragut, Ms Ana Gómez Gómez and Mr Emilio del Valle Rodríguez, who have resigned for the remainder of their term of office, which runs until 25 January 2002.</p><p></p><p>Done at Brussels, 8 November 1999.</p><p></p><p>For the Council</p><p>The President</p><p>S. NIINISTÖ</p><p></p><p>(1) OJ L 28, 4.2.1998, p. 19.</p><p> </p></txt_te></p></div></div><a class='linkToTop' href='#document1'>Top</a></div></div></div></div>;";
-        String txt = "<html><div><h1>Title</h1><p>Paragraph with <b>bold</b></p></div><div><h1>H1</h1><h2>H2</h2><h3>H1</h3><h4>H2</h4><h5>H1</h5><h4>H2</h4></div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div></html>";
+//        String txt = "<html><div><h1>Title</h1><p>Paragraph with <b>bold</b></p></div><div><h1>H1</h1><h2>H2</h2><h3>H1</h3><h4>H2</h4><h5>H1</h5><h4>H2</h4></div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div><div>DIVVVVVV</div></html>";
+        String txt = "<html><p>paragraph <p>test <p>test2</p> </p></p></html>";
+//        String txt = "<html>Test <b class='.nice'>Bo <i> l </b> d </i></html> World";
         cas.setDocumentText(txt);
-//        cas.setDocumentText("Hello <html>World</html>");
         cas.setDocumentLanguage("en");
 
         AggregateBuilder ab = new AggregateBuilder();
@@ -90,8 +88,9 @@ public class TextTransformerTests {
         // Create aed's
         AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
         AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
+
         AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
-                Html2TextTransformer.PARAM_TARGET_VIEW_NAME,
+                Text2HtmlTransformer.PARAM_TARGET_VIEW_NAME,
                 "text2htmlView",
                 Html2TextTransformer.PARAM_TYPES_TO_COPY,
                 types,

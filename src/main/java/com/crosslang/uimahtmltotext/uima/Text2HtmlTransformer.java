@@ -27,14 +27,15 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
         Collections.reverse(list);
 
         // Text to HTML
-        // TODO Use Untangle Tags for more accurate HTML conversion
         for (ValueBetweenTagType vbtt : list) {
-            if (!vbtt.getAttributes().isEmpty()) {
-                insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName(), vbtt.getAttributes()));
-            } else {
-                insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName()));
+            if (hasNext()) {
+                if (!vbtt.getAttributes().isEmpty()) {
+                    insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName(), vbtt.getAttributes()));
+                } else {
+                    insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName()));
+                }
+                insert(vbtt.getEnd(), getClosingTag(vbtt.getTagName()));
             }
-            insert(vbtt.getEnd(), getClosingTag(vbtt.getTagName()));
         }
     }
 

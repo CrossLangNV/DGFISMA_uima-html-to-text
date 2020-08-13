@@ -27,13 +27,13 @@ public class MainController {
 
     @RequestMapping(value = "/html2text", method = RequestMethod.POST, produces = { "application/xml", "text/xml" })
     @ResponseBody
-    public byte[] html2text(@RequestBody HtmlInput input) throws UIMAException, IOException {
+    public byte[] html2text(@RequestBody HtmlInput input) {
         return uimaTextTransferService.htmlToText(input);
     }
 
     @RequestMapping(value = "/html2text/typesystem", method = RequestMethod.GET, produces = { "application/xml", "text/xml" })
     @ResponseBody
-    public byte[] getTypesystem() throws UIMAException, IOException {
+    public byte[] getTypesystem() throws IOException {
         File file = new File("./target/cache/typesystem.xml");
         InputStream in = new FileInputStream(file);
         return IOUtils.toByteArray(in);
