@@ -37,9 +37,11 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
             }
         }
 
+        List<HtmlTag> closed = new ArrayList<>();
+
         for (HtmlTag s : htmlTagOpeningList) {
             for (HtmlTag e : htmlTagClosingList) {
-                if (e.getTagName().equals(s.getTagName()) && s.getBegin() < e.getEnd()) {
+                if (e.getTagName().equals(s.getTagName()) && s.getBegin() < e.getEnd() && !closed.contains(s)) {
 
                     // Meegeven aan typestocopy
                     ValueBetweenTagType vbtt = new ValueBetweenTagType(aInput);
@@ -58,6 +60,8 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
 
                     vbtt.setAttributes(sb.toString());
                     vbtt.addToIndexes();
+
+                    closed.add(s);
                 }
             }
         }
