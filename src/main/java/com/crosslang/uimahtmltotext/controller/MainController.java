@@ -3,12 +3,13 @@ package com.crosslang.uimahtmltotext.controller;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.service.UimaTextTransferService;
 import org.apache.commons.io.IOUtils;
-import org.apache.uima.UIMAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,9 +40,9 @@ public class MainController {
         return IOUtils.toByteArray(in);
     }
 
-    @RequestMapping(value = "/text2html", method = RequestMethod.POST, produces = { "application/xml", "text/xml" }, consumes = MediaType.ALL_VALUE )
+    @RequestMapping(value = "/text2html", method = RequestMethod.POST, produces = { "application/xml", "text/xml" })
     @ResponseBody
-    public String text2html() {
-        return "Not implemented yet.";
+    public byte[] text2html(@RequestBody HtmlInput input) {
+        return uimaTextTransferService.textToHtml(input);
     }
 }
