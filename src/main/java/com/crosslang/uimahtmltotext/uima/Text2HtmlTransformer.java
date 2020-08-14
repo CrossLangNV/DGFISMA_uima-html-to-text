@@ -28,12 +28,14 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
 
         // Text to HTML
         for (ValueBetweenTagType vbtt : list) {
-            if (hasNext()) {
-                if (!vbtt.getAttributes().isEmpty()) {
-                    insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName(), vbtt.getAttributes()));
-                } else {
-                    insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName()));
-                }
+            if (!vbtt.getAttributes().isEmpty()) {
+                insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName(), vbtt.getAttributes()));
+            } else {
+                insert(vbtt.getBegin(), getOpeningTag(vbtt.getTagName()));
+            }
+            if (vbtt.getEnd() == aInput.getDocumentText().length()) {
+                insert(vbtt.getEnd()-1, getClosingTag(vbtt.getTagName()));
+            } else {
                 insert(vbtt.getEnd(), getClosingTag(vbtt.getTagName()));
             }
         }

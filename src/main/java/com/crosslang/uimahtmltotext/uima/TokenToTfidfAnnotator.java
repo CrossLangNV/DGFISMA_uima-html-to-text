@@ -20,7 +20,6 @@ public class TokenToTfidfAnnotator extends JCasAnnotator_ImplBase {
 
     @Override
     public void process(JCas aJCas) {
-
         List<Tfidf> terms = new ArrayList<>();
         List<Token> termBuilder = new ArrayList<>();
 
