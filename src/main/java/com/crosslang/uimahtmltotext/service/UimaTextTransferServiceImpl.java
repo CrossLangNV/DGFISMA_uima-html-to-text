@@ -31,7 +31,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,12 +68,9 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
 
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
-                    PARAM_TARGET_VIEW_NAME,
-                    "text2htmlView",
-                    PARAM_TYPES_TO_COPY,
-                    types,
-                    PARAM_REMOVE_OVERLAPPING,
-                    false);
+                    PARAM_TARGET_VIEW_NAME, "text2htmlView",
+                    PARAM_TYPES_TO_COPY, types,
+                    PARAM_REMOVE_OVERLAPPING, false);
 
             // Write output to XMI to return to ResponseBody
             AnalysisEngineDescription xmiWriter =
@@ -113,7 +109,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             AggregateBuilder ab = new AggregateBuilder();
 
-            List<String> types = Arrays.asList(ValueBetweenTagType.class.getName());
+            List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
 
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
