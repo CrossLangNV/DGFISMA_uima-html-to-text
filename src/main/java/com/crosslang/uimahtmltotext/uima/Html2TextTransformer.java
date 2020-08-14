@@ -67,7 +67,7 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
                     StringBuilder sb = new StringBuilder();
                     for (int i=0; i < s.getAttributes().size(); i++) {
                         tagAttributesMap.put(s.getAttributes(i).getName(), s.getAttributes(i).getValue());
-                        sb.append(s.getAttributes(i).getName()).append("='").append(s.getAttributes(i).getValue()).append("' ");
+                        sb.append(s.getAttributes(i).getName()).append("='").append(s.getAttributes(i).getValue()).append("'");
                     }
 
                     vbtt.setAttributes(sb.toString());
