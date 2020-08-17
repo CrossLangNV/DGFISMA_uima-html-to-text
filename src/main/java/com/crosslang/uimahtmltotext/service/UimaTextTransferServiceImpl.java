@@ -120,7 +120,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,
                             PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, PATH_TO_XMI
+                            PARAM_TARGET_LOCATION, "./target/cache"
                     );
 
             ab.add(html);
