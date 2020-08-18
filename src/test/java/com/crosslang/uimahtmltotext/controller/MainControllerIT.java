@@ -2,58 +2,73 @@ package com.crosslang.uimahtmltotext.controller;
 
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.service.UimaTextTransferService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
+@SpringBootTest
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {HtmlInput.class, UimaTextTransferService.class})
-@WebMvcTest
-public class MainControllerIT {
+class MainControllerIT {
+    public static final Logger logger = LoggerFactory.getLogger(MainControllerIT.class);
+
+    @Autowired
+    private UimaTextTransferService uimaTextTransferService;
+
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
-    HtmlInput input1 = new HtmlInput("<html>Hello World</html>");
-    HtmlInput input2 = new HtmlInput("<html>Hello <b>World</b></html>");
+    public static String input_html = "<html><p>Hello <b>World</b></p></html>";
 
     @Test
-    public void html2text() throws Exception {
-        testHtmlToText(input1);
-        testHtmlToText(input2);
+    @DisplayName("GET /html2text/typesystem")
+    void testTypeSystem() throws Exception {
+        mockMvc.perform(get("/html2text/typesystem"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_XML))
+                .andReturn();
     }
 
-    private void testHtmlToText(HtmlInput input) throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/html2text")
-        .content(input.toJson())
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+    @Test
+    @DisplayName("POST /html2text")
+    void testHtmlToText() throws Exception {
+
+        HtmlInput input = new HtmlInput(input_html);
+
+        mockMvc.perform(post("/html2text")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(input)))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_XML));
+    }
+
+    // TODO: Make /text2html test
+    @Test
+    @DisplayName("POST /text2html")
+    void testTextToHtml() throws Exception {
+        HtmlInput input = new HtmlInput(input_html);
+        MvcResult result = mockMvc.perform(post("/html2text")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(input)))
                 .andReturn();
 
-        String resultXmi = result.getResponse().getContentAsString();
-        assertNotNull(resultXmi);
+        mockMvc.perform(post("/text2html")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(result.getResponse().getContentAsString())))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_XML))
+                .andReturn();
     }
 }
