@@ -26,20 +26,22 @@ class UimaTextTransferServiceImplTest {
     public static String input_html = "<html><p>Hello <b>World</b></p></html>";
 
     @Test
-    @DisplayName("Test if typesystem file is not empty")
+    @DisplayName("Unit test: Typesystem")
     void unitTestTypesystem() throws Exception {
         byte[] typeSystemFile = uimaTextTransferService.getTypeSystemFile();
         MatcherAssert.assertThat(typeSystemFile.length, greaterThan(5));
     }
 
     @Test
-    void htmlToText() {
+    @DisplayName("Unit test: Html2Text")
+    void htmlToTextTest() {
         byte[] result = uimaTextTransferService.htmlToText(new HtmlInput(input_html));
         Assertions.assertNotEquals(0, result.length);
     }
 
     @Test
-    void textToHtml() {
+    @DisplayName("Unit test: Text2Html")
+    void textToHtmlTest() {
         byte[] bytes = uimaTextTransferService.htmlToText(new HtmlInput(input_html));
         String s = new String(bytes, StandardCharsets.UTF_8);
 

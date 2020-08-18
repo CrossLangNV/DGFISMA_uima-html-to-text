@@ -1,7 +1,6 @@
 package com.crosslang.uimahtmltotext.controller;
 
 import com.crosslang.uimahtmltotext.model.HtmlInput;
-import com.crosslang.uimahtmltotext.service.UimaTextTransferService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class MainControllerIT {
     public static final Logger logger = LoggerFactory.getLogger(MainControllerIT.class);
-
-    @Autowired
-    private UimaTextTransferService uimaTextTransferService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -54,7 +50,6 @@ class MainControllerIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_XML));
     }
 
-    // TODO: Make /text2html test
     @Test
     @DisplayName("POST /text2html")
     void testTextToHtml() throws Exception {
