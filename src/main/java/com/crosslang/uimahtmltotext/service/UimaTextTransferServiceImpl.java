@@ -7,11 +7,11 @@ import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
 import com.crosslang.uimahtmltotext.uima.TokenToTfidfAnnotator;
+import com.crosslang.uimahtmltotext.uima.WhitespaceTokenizer;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
 import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiReader;
 import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiWriter;
-import de.tudarmstadt.ukp.dkpro.core.opennlp.OpenNlpSegmenter;
 import org.apache.commons.io.IOUtils;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -43,8 +43,54 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 @Service
 public class UimaTextTransferServiceImpl implements UimaTextTransferService {
     public static final Logger logger = LoggerFactory.getLogger(UimaTextTransferServiceImpl.class);
-    static final String TARGET_VIEW_NAME = "targetViewName";
+    static final String TARGET_VIEW_NAME = "html2textView";
+    static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
     static final String PATH_TO_XMI = "./target/cache/docId.xmi";
+
+    @Override
+    public byte[] htmlToText(HtmlInput input) {
+        JCas cas = null;
+        try {
+            cas = JCasFactory.createJCas();
+            cas.setDocumentText(input.getText());
+            cas.setDocumentLanguage("en");
+
+            AggregateBuilder ab = new AggregateBuilder();
+
+            List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
+
+
+            // Create and add AED's
+            AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
+            // Change OpenNlpSegmenter to custom tokenizer
+            AnalysisEngineDescription tok = AnalysisEngineFactory.createEngineDescription(WhitespaceTokenizer.class);
+            AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
+                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
+            AnalysisEngineDescription xmiWriter =
+                    AnalysisEngineFactory.createEngineDescription(
+                            XmiWriter.class,
+                            PARAM_OVERWRITE, true,
+                            PARAM_TARGET_LOCATION, "./target/cache"
+                    );
+
+            ab.add(html);
+            ab.add(aed1);
+            ab.add(tok, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
+            ab.add(xmiWriter);
+
+            AnalysisEngineDescription aed = ab.createAggregateDescription();
+
+            SimplePipeline.runPipeline(cas, aed);
+            CasDumperReadable.dump(cas);
+
+            File file = new File(PATH_TO_XMI);
+            InputStream in = new FileInputStream(file);
+            return IOUtils.toByteArray(in);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new byte[0];
+    }
 
     @Override
     public byte[] textToHtml(HtmlInput input) {
@@ -65,12 +111,14 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             // Create aed's
             AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-            AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
+
 
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, "text2htmlView",
+                    PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
                     PARAM_TYPES_TO_COPY, types,
                     PARAM_REMOVE_OVERLAPPING, false);
+
+            AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
 
             // Write output to XMI to return to ResponseBody
             AnalysisEngineDescription xmiWriter =
@@ -100,51 +148,19 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
     }
 
     @Override
-    public byte[] htmlToText(HtmlInput input) {
-        JCas cas = null;
-        try {
-            cas = JCasFactory.createJCas();
-            cas.setDocumentText(input.getText());
-            cas.setDocumentLanguage("en");
-
-            AggregateBuilder ab = new AggregateBuilder();
-
-            List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
-
-            // Create and add AED's
-            AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
-            AnalysisEngineDescription tok = AnalysisEngineFactory.createEngineDescription(OpenNlpSegmenter.class);
-            AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
-            AnalysisEngineDescription xmiWriter =
-                    AnalysisEngineFactory.createEngineDescription(
-                            XmiWriter.class,
-                            PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, "./target/cache"
-                    );
-
-            ab.add(html);
-            ab.add(aed1);
-            ab.add(tok);
-            ab.add(xmiWriter);
-
-            AnalysisEngineDescription aed = ab.createAggregateDescription();
-
-            SimplePipeline.runPipeline(cas, aed);
-            CasDumperReadable.dump(cas);
-
-            File file = new File(PATH_TO_XMI);
-            InputStream in = new FileInputStream(file);
+    public byte[] getTypeSystemFile() {
+        File file = new File("./target/cache/typesystem.xml");
+        try (InputStream in = new FileInputStream(file)) {
             return IOUtils.toByteArray(in);
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return new byte[0];
     }
 
-    public void writeCasDumpToFile(JCas cas, String path) throws FileNotFoundException, CASException {
+    public void writeCasDumpToFile(JCas cas, String path, String view) throws FileNotFoundException, CASException {
         try (PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
-            CasDumperReadable.dump(cas.getView("text2html"), printWriter);
+            CasDumperReadable.dump(cas.getView(view), printWriter);
         }
     }
 }

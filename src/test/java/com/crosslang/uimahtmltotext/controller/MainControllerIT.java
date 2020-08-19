@@ -26,7 +26,7 @@ class MainControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    public static String input_html = "<html><p>Hello <b>World</b></p></html>";
+    public static String input_html = "<html><p>Hello <b>World</b> Hello World Test 123 Number acht Test Test</p></html>";
 
     @Test
     @DisplayName("GET /html2text/typesystem")

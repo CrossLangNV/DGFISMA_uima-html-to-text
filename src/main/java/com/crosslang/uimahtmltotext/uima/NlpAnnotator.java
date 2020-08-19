@@ -10,7 +10,7 @@ public class NlpAnnotator extends JCasAnnotator_ImplBase {
     @Override
     public void process(JCas cas) throws AnalysisEngineProcessException {
         try {
-            JCas target = cas.getView("targetViewName");
+            JCas target = cas.getView("html2textView");
             Token t = new Token(target);
             t.setBegin(21);
             t.setEnd(26);
