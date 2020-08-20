@@ -6,7 +6,6 @@ import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
-import com.crosslang.uimahtmltotext.uima.TokenToTfidfAnnotator;
 import com.crosslang.uimahtmltotext.uima.WhitespaceTokenizer;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
@@ -118,7 +117,8 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     PARAM_TYPES_TO_COPY, types,
                     PARAM_REMOVE_OVERLAPPING, false);
 
-            AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
+            // Commented because we decided to create the Tfidf annotations on the NLP side
+            //AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
 
             // Write output to XMI to return to ResponseBody
             AnalysisEngineDescription xmiWriter =
@@ -128,7 +128,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                             PARAM_TARGET_LOCATION, "./target/cache"
                     );
 
-            ab.add(tokenToTfidAnnotator, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
+            //ab.add(tokenToTfidAnnotator, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
 
             ab.add(aedDump);
