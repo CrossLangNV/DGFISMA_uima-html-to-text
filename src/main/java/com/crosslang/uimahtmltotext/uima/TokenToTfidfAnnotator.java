@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * This class will read @{@link Token} objects, check for their BIO tags, and when a BI (Begin Outside) tag has been
  * found, it will merge these Tokens into a @{@link Tfidf} object. Which will hold a Term/Concept
+ *
+ * Known issue: When "I" is the last tag, it might break
  */
 public class TokenToTfidfAnnotator extends JCasAnnotator_ImplBase {
     public static final Logger logger = LoggerFactory.getLogger(TokenToTfidfAnnotator.class);
@@ -25,35 +27,30 @@ public class TokenToTfidfAnnotator extends JCasAnnotator_ImplBase {
 
         int max = countTotalTokens(aJCas);
 
-        int x = 0;
-
         for (int i=0; i< max; i++) {
             Token token = JCasUtil.selectByIndex(aJCas, Token.class, i);
 
-            if (token.getPos() != null) {
-                if (token.getPos().equals("B")) {
-                    termBuilder.add(token);
-                    if (max > 1) {
-                        for (int j = i + 1; j < max; j++) {
-                            Token nextToken = JCasUtil.selectByIndex(aJCas, Token.class, j);
-                            if (nextToken.getPos() != null) {
-                                if (nextToken.getPos().equals("I")) {
-                                    termBuilder.add(nextToken);
-                                } else {
-                                    // TODO Als i laatste is, werkt het niet meer
-                                    Tfidf tfidf = new Tfidf(aJCas, token.getBegin(), JCasUtil.selectByIndex(aJCas, Token.class, j-1).getEnd());
-                                    terms.add(tfidf);
-                                    tfidf.addToIndexes();
-                                    termBuilder.clear();
-                                    break;
-                                }
+            if (token.getPos() != null && token.getPos().equals("B")) {
+                termBuilder.add(token);
+                if (max > 1) {
+                    for (int j = i + 1; j < max; j++) {
+                        Token nextToken = JCasUtil.selectByIndex(aJCas, Token.class, j);
+                        if (nextToken.getPos() != null) {
+                            if (nextToken.getPos().equals("I")) {
+                                termBuilder.add(nextToken);
+                            } else {
+                                Tfidf tfidf = new Tfidf(aJCas, token.getBegin(), JCasUtil.selectByIndex(aJCas, Token.class, j - 1).getEnd());
+                                terms.add(tfidf);
+                                tfidf.addToIndexes();
+                                termBuilder.clear();
+                                break;
                             }
                         }
-                    } else {
-                        // This will probably only happen in the unit test, when only 1 term has been found
-                        Tfidf tfidf = new Tfidf(aJCas, token.getBegin(), token.getEnd());
-                        tfidf.addToIndexes();
                     }
+                } else {
+                    // This will probably only happen in the unit test, when only 1 term has been found
+                    Tfidf tfidf = new Tfidf(aJCas, token.getBegin(), token.getEnd());
+                    tfidf.addToIndexes();
                 }
             }
         }

@@ -1,6 +1,7 @@
 package com.crosslang.uimahtmltotext.controller;
 
 import com.crosslang.uimahtmltotext.model.HtmlInput;
+import com.crosslang.uimahtmltotext.utils.FileReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.io.File;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,4 +69,23 @@ class MainControllerIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_XML))
                 .andReturn();
     }
+
+    @Test
+    @DisplayName("Full test like in our Django application with a NLP Mock XMI")
+    void fullTestWithNlpMock() throws Exception {
+        String resourceName = "nlp_mock.xml";
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource(resourceName).getFile());
+        String absolutePath = file.getAbsolutePath();
+        String xmi = FileReader.readAllBytes(absolutePath);
+
+        mockMvc.perform(post("/text2html")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(xmi)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_XML))
+                .andReturn();
+    }
+
+
 }

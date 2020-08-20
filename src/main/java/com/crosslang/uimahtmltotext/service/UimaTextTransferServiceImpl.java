@@ -57,10 +57,8 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
 
-
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
-            // Change OpenNlpSegmenter to custom tokenizer
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
             AnalysisEngineDescription xmiWriter =
@@ -107,8 +105,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             // Create aed's
             AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-
-
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
                     PARAM_TYPES_TO_COPY, types,
@@ -123,7 +119,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     );
 
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
-
             ab.add(aedDump);
             ab.add(xmiWriter);
 
@@ -136,7 +131,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
         } catch (UIMAException | IOException e) {
             e.printStackTrace();
         }
-
         return new byte[0];
     }
 
