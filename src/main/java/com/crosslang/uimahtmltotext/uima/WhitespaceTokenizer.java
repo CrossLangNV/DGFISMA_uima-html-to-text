@@ -14,27 +14,14 @@ public class WhitespaceTokenizer extends JCasAnnotator_ImplBase {
     @Override
     public void process(JCas aJCas) throws AnalysisEngineProcessException {
         String text = aJCas.getDocumentText();
-        text = text.endsWith("\n") ? text : text + "\n";
-        Matcher whitespaceMatcher = whitespace.matcher(text);
+        String newText = text.endsWith("\n") ? text : text + "\n";
+        Matcher whitespaceMatcher = whitespace.matcher(newText);
 
         int x=0;
 
         for(int previousStart = 0; whitespaceMatcher.find(); previousStart = whitespaceMatcher.end()) {
             int end = whitespaceMatcher.start();
             Token token = new Token(aJCas, previousStart, end);
-
-            if (x==5) {
-                token.setPos("B");
-            } else if (x == 6) {
-                token.setPos("I");
-            } else if (x==7) {
-                token.setPos("I");
-                x=0;
-            } else {
-                token.setPos("O");
-            }
-            x++;
-
             token.addToIndexes(aJCas);
         }
     }

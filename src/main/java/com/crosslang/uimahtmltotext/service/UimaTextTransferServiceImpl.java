@@ -6,7 +6,6 @@ import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
-import com.crosslang.uimahtmltotext.uima.WhitespaceTokenizer;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
 import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiReader;
@@ -62,7 +61,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
             // Change OpenNlpSegmenter to custom tokenizer
-            AnalysisEngineDescription tok = AnalysisEngineFactory.createEngineDescription(WhitespaceTokenizer.class);
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
             AnalysisEngineDescription xmiWriter =
@@ -74,7 +72,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             ab.add(html);
             ab.add(aed1);
-            ab.add(tok, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
             ab.add(xmiWriter);
 
             AnalysisEngineDescription aed = ab.createAggregateDescription();
@@ -117,9 +114,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     PARAM_TYPES_TO_COPY, types,
                     PARAM_REMOVE_OVERLAPPING, false);
 
-            // Commented because we decided to create the Tfidf annotations on the NLP side
-            //AnalysisEngineDescription tokenToTfidAnnotator = AnalysisEngineFactory.createEngineDescription(TokenToTfidfAnnotator.class);
-
             // Write output to XMI to return to ResponseBody
             AnalysisEngineDescription xmiWriter =
                     AnalysisEngineFactory.createEngineDescription(
@@ -128,7 +122,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                             PARAM_TARGET_LOCATION, "./target/cache"
                     );
 
-            //ab.add(tokenToTfidAnnotator, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
 
             ab.add(aedDump);
