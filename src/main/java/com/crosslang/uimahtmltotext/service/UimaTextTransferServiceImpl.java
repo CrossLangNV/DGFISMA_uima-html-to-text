@@ -1,6 +1,7 @@
 package com.crosslang.uimahtmltotext.service;
 
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
+import com.crosslang.sdk.types.html.HtmlTag;
 import com.crosslang.sdk.utils.commons.CasDumperReadable;
 import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
@@ -56,11 +57,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AggregateBuilder ab = new AggregateBuilder();
 
             List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
+            List<String> htmlTags = Collections.singletonList(HtmlTag.class.getName());
 
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
+                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types, PARAM_TYPES_TO_COPY, htmlTags);
             AnalysisEngineDescription xmiWriter =
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,

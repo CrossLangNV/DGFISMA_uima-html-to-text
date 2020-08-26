@@ -29,7 +29,14 @@ class MainControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    public static String input_html = "<html><p>Hello <b>World</b> Hello World Test 123 Number acht Test Test</p></html>";
+    public static String input_html =
+            "<table class='outer'>" +
+                "<p>hm</p> New table " +
+                "<p>one " +
+                    "<p class='para'>two</p>" +
+                "</p>" +
+                "<table class='inner'>inner table</table>" +
+            "</table>";
 
     @Test
     @DisplayName("GET /html2text/typesystem")
@@ -86,6 +93,4 @@ class MainControllerIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_XML))
                 .andReturn();
     }
-
-
 }
