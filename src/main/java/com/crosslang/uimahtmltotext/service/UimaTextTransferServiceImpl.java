@@ -56,7 +56,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AggregateBuilder ab = new AggregateBuilder();
 
             List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
-            //List<String> htmlTags = Collections.singletonList(HtmlTag.class.getName());
 
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);

@@ -34,8 +34,8 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
 
                 // Workaround: Insert spaces according to how long the closing tag is and replace that by the tag
                 String lastChar = aInput.getDocumentText().substring(aInput.getDocumentText().length()-1);
-                replace(aInput.getDocumentText().length()-1, aInput.getDocumentText().length(), lastChar + getClosingTag(vbtt), null, null, 1);
-                //insert(vbtt.getEnd()-1, getClosingTag(vbtt));
+                replace(aInput.getDocumentText().length()-1, aInput.getDocumentText().length(), lastChar +
+                        getClosingTag(vbtt), null, null, 1);
             } else {
                 insert(vbtt.getEnd(), getClosingTag(vbtt));
             }
