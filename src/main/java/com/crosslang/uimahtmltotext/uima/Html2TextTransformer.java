@@ -3,6 +3,7 @@ package com.crosslang.uimahtmltotext.uima;
 import com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase;
 import com.crosslang.sdk.types.html.HtmlTag;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
+import com.crosslang.uimahtmltotext.utils.HtmlTagUtils;
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
 import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.uima.fit.util.JCasUtil;
@@ -10,9 +11,9 @@ import org.apache.uima.jcas.JCas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This class will transform Html into Text
@@ -39,42 +40,42 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
         metaData.addToIndexes();
 
         // Add open/close tags to list
-        List<HtmlTag> htmlTagOpeningList = new ArrayList<>();
-        List<HtmlTag> htmlTagClosingList = new ArrayList<>();
-        for (HtmlTag s : JCasUtil.select(aInput, HtmlTag.class)) {
-            if (s.getTagRole().equals(TAG_OPENING)) {
-                htmlTagOpeningList.add(s);
-            } else {
-                htmlTagClosingList.add(s);
-            }
-        }
+        List<HtmlTag> htmlTagOpened = HtmlTagUtils.getTagsByState(aInput, TAG_OPENING);
+        List<HtmlTag> htmlTagClosed = HtmlTagUtils.getTagsByState(aInput, "CLOSING");
 
-        List<HtmlTag> closed = new ArrayList<>();
+        for (HtmlTag e : htmlTagClosed) {
+            // Find the latest opened tag of the same type to match the close with
+            Optional<HtmlTag> opt = HtmlTagUtils.getLastObjectByTagType(htmlTagOpened, e);
 
-        for (HtmlTag s : htmlTagOpeningList) {
-            for (HtmlTag e : htmlTagClosingList) {
-                if (e.getTagName().equals(s.getTagName()) && s.getBegin() < e.getEnd() && !closed.contains(s)) {
+            // Insert operations
+            if (opt.isPresent()) {
+                HtmlTag lastTag = opt.get();
+                int beginPos = lastTag.getEnd();
+                int endPos = e.getBegin();
 
-                    // We set these objects here, to pass them to the PARAM_TYPES_TO_COPY
-                    ValueBetweenTagType vbtt = new ValueBetweenTagType(aInput);
-                    vbtt.setBegin(s.getEnd());
-                    vbtt.setEnd(e.getBegin());
-                    vbtt.setTagName(e.getTagName());
 
-                    Map<String, String> tagAttributesMap = new LinkedMap<>();
+                ValueBetweenTagType vbtt = new ValueBetweenTagType(aInput);
+                vbtt.setBegin(beginPos);
+                vbtt.setEnd(endPos);
+                vbtt.setTagName(e.getTagName());
 
-                    // Get attributes
-                    StringBuilder sb = new StringBuilder();
-                    for (int i=0; i < s.getAttributes().size(); i++) {
-                        tagAttributesMap.put(s.getAttributes(i).getName(), s.getAttributes(i).getValue());
-                        sb.append(s.getAttributes(i).getName()).append("='").append(s.getAttributes(i).getValue()).append("'");
+                Map<String, String> tagAttributesMap = new LinkedMap<>();
+
+                // Get attributes
+                StringBuilder sb = new StringBuilder();
+
+                if (lastTag.getAttributes() != null) {
+                    for (int i=0; i < lastTag.getAttributes().size(); i++) {
+                        tagAttributesMap.put(lastTag.getAttributes(i).getName(), lastTag.getAttributes(i).getValue());
+                        sb.append(lastTag.getAttributes(i).getName()).append("='").append(lastTag.getAttributes(i).getValue()).append("'");
                     }
-
-                    vbtt.setAttributes(sb.toString());
-                    vbtt.addToIndexes();
-
-                    closed.add(s);
                 }
+
+                vbtt.setAttributes(sb.toString());
+                vbtt.addToIndexes();
+
+                htmlTagOpened.remove(lastTag);
+
             }
         }
 

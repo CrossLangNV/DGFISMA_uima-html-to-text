@@ -1,7 +1,6 @@
 package com.crosslang.uimahtmltotext.service;
 
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
-import com.crosslang.sdk.types.html.HtmlTag;
 import com.crosslang.sdk.utils.commons.CasDumperReadable;
 import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
@@ -57,12 +56,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AggregateBuilder ab = new AggregateBuilder();
 
             List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
-            List<String> htmlTags = Collections.singletonList(HtmlTag.class.getName());
+            //List<String> htmlTags = Collections.singletonList(HtmlTag.class.getName());
 
             // Create and add AED's
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types, PARAM_TYPES_TO_COPY, htmlTags);
+                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
             AnalysisEngineDescription xmiWriter =
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,
@@ -104,12 +103,14 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AggregateBuilder ab = new AggregateBuilder();
 
             List<String> types = Collections.singletonList(Tfidf.class.getName());
+            List<String> vbtts = Collections.singletonList(ValueBetweenTagType.class.getName());
 
             // Create aed's
             AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
                     PARAM_TYPES_TO_COPY, types,
+                    PARAM_TYPES_TO_COPY, vbtts,
                     PARAM_REMOVE_OVERLAPPING, false);
 
             // Write output to XMI to return to ResponseBody
