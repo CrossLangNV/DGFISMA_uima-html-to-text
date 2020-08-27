@@ -23,18 +23,19 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
     public void process(JCas aInput, JCas aOutput) throws AnalysisEngineProcessException {
         Collection<ValueBetweenTagType> collection = JCasUtil.select(aInput, ValueBetweenTagType.class);
         List<ValueBetweenTagType> list = new ArrayList<>(collection);
-//        Collections.reverse(list);
 
         // Text to HTML
         for (ValueBetweenTagType vbtt : list) {
-            logger.info("VBTT: Working on: "+vbtt.getTagName()+ ", with pos "+vbtt.getBegin()+"/"+vbtt.getEnd());
-
             // Insert opening tag
             insert(vbtt.getBegin(), getOpeningTag(vbtt));
 
             // Insert closing tag
             if (vbtt.getEnd() == aInput.getDocumentText().length()) {
-                insert(vbtt.getEnd()-1, getClosingTag(vbtt));
+
+                // Workaround: Insert spaces according to how long the closing tag is and replace that by the tag
+                String lastChar = aInput.getDocumentText().substring(aInput.getDocumentText().length()-1);
+                replace(aInput.getDocumentText().length()-1, aInput.getDocumentText().length(), lastChar + getClosingTag(vbtt), null, null, 1);
+                //insert(vbtt.getEnd()-1, getClosingTag(vbtt));
             } else {
                 insert(vbtt.getEnd(), getClosingTag(vbtt));
             }
