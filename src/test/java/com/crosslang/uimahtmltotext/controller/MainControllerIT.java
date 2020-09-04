@@ -29,7 +29,7 @@ class MainControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    public static String input_html =
+    public static final String INPUT_HTML =
             "<table class='outer'>" +
                 "<p>hm</p> New table " +
                 "<p>one " +
@@ -37,6 +37,8 @@ class MainControllerIT {
                 "</p>" +
                 "<table class='inner'>inner table</table>" +
             "</table>";
+
+    public static final String NLP_MOCK = "nlp_mock.xml";
 
     @Test
     @DisplayName("GET /html2text/typesystem")
@@ -51,7 +53,7 @@ class MainControllerIT {
     @DisplayName("POST /html2text")
     void testHtmlToText() throws Exception {
 
-        HtmlInput input = new HtmlInput(input_html);
+        HtmlInput input = new HtmlInput(INPUT_HTML);
 
         mockMvc.perform(post("/html2text")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,7 +65,7 @@ class MainControllerIT {
     @Test
     @DisplayName("POST /text2html")
     void testTextToHtml() throws Exception {
-        HtmlInput input = new HtmlInput(input_html);
+        HtmlInput input = new HtmlInput(INPUT_HTML);
         MvcResult result = mockMvc.perform(post("/html2text")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(input)))
@@ -80,9 +82,8 @@ class MainControllerIT {
     @Test
     @DisplayName("Full test like in our Django application with a NLP Mock XMI")
     void fullTestWithNlpMock() throws Exception {
-        String resourceName = "nlp_mock.xml";
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(resourceName).getFile());
+        File file = new File(classLoader.getResource(NLP_MOCK).getFile());
         String absolutePath = file.getAbsolutePath();
         String xmi = FileReader.readAllBytes(absolutePath);
 

@@ -14,8 +14,15 @@
     <name>uima-html-to-text</name>
     <description>Demo project for Spring Boot</description>
 
+    <scm>
+        <developerConnection>scm:git:ssh://git@gitlab.crosslang.local:mt/uima-html-to-text.git</developerConnection>
+        <connection>scm:git:ssh://git@gitlab.crosslang.local:mt/uima-html-to-text.git</connection>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
+        <jib-maven-plugin.version>2.5.0</jib-maven-plugin.version>
+        <image.path>docker.crosslang.com/ctlg-manager/uima-html-to-text</image.path>
     </properties>
 
     <dependencies>
@@ -102,6 +109,17 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.5.0</version>
+                <configuration>
+                    <to>
+                        <image>${image.path}</image>
+                    </to>
+                </configuration>
             </plugin>
         </plugins>
     </build>
