@@ -22,7 +22,8 @@
     <properties>
         <java.version>1.8</java.version>
         <jib-maven-plugin.version>2.5.0</jib-maven-plugin.version>
-        <image.path>docker.crosslang.com/ctlg-manager/uima-html-to-text</image.path>
+        <!--suppress UnresolvedMavenProperty -->
+        <image.path>docker.crosslang.com/ctlg-manager/uima-html-to-text:${env.BRANCH_NAME}</image.path>
     </properties>
 
     <dependencies>
