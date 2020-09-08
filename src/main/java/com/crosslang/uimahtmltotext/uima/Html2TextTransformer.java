@@ -29,6 +29,7 @@ import java.util.Optional;
 public class Html2TextTransformer extends JCasTransformer_ImplBase {
     public static final Logger logger = LoggerFactory.getLogger(Html2TextTransformer.class);
     public static final String TAG_OPENING = "OPENING";
+    public static final String TAG_CLOSING = "CLOSING";
 
     @Override
     public void process(JCas aInput, JCas aOutput) {
@@ -41,7 +42,7 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
 
         // Add open/close tags to list
         List<HtmlTag> htmlTagOpened = HtmlTagUtils.getTagsByState(aInput, TAG_OPENING);
-        List<HtmlTag> htmlTagClosed = HtmlTagUtils.getTagsByState(aInput, "CLOSING");
+        List<HtmlTag> htmlTagClosed = HtmlTagUtils.getTagsByState(aInput, TAG_CLOSING);
 
         for (HtmlTag e : htmlTagClosed) {
             // Find the latest opened tag of the same type to match the close with
@@ -52,7 +53,6 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
                 HtmlTag lastTag = opt.get();
                 int beginPos = lastTag.getEnd();
                 int endPos = e.getBegin();
-
 
                 ValueBetweenTagType vbtt = new ValueBetweenTagType(aInput);
                 vbtt.setBegin(beginPos);
@@ -67,7 +67,8 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
                 if (lastTag.getAttributes() != null) {
                     for (int i=0; i < lastTag.getAttributes().size(); i++) {
                         tagAttributesMap.put(lastTag.getAttributes(i).getName(), lastTag.getAttributes(i).getValue());
-                        sb.append(lastTag.getAttributes(i).getName()).append("='").append(lastTag.getAttributes(i).getValue()).append("'");
+                        sb.append(lastTag.getAttributes(i).getName()).append("='").append(lastTag.getAttributes(i)
+                                .getValue()).append("'");
                     }
                 }
 
@@ -87,9 +88,5 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
         for (HtmlTag s : JCasUtil.select(cas, HtmlTag.class)) {
             delete(s.getBegin(), s.getEnd());
         }
-    }
-
-    public String getDocSubstring(JCas cas, int x, int y) {
-        return cas.getDocumentText().substring(x, y);
     }
 }

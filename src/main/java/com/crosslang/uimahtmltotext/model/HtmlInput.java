@@ -2,7 +2,6 @@ package com.crosslang.uimahtmltotext.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.O;
 
 import java.util.Objects;
 

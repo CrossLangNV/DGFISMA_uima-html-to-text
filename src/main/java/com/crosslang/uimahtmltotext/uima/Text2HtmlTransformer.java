@@ -44,13 +44,13 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
 
     public static String getOpeningTag(ValueBetweenTagType vbtt) {
         if (!vbtt.getAttributes().isEmpty()) {
-            return "<"+vbtt.getTagName()+" "+vbtt.getAttributes()+">";
+            return String.format("<%s %s>", vbtt.getTagName(), vbtt.getAttributes());
         } else {
-            return "<"+vbtt.getTagName()+">";
+            return String.format("<%s>", vbtt.getTagName());
         }
     }
 
     public static String getClosingTag(ValueBetweenTagType vbtt) {
-        return "</"+vbtt.getTagName()+">";
+        return String.format("</%s>", vbtt.getTagName());
     }
 }

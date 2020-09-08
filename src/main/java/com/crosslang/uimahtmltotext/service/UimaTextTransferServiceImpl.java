@@ -14,7 +14,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.cas.CAS;
-import org.apache.uima.cas.CASException;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
@@ -25,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -44,10 +45,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
     static final String TARGET_VIEW_NAME = "html2textView";
     static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
     static final String PATH_TO_XMI = "./target/cache/docId.xmi";
+    static final String PATH_TO_TYPESYSTEM = "./target/cache/typesystem.xml";
+    static final String PATH_TO_CACHE = "./target/cache";
 
     @Override
     public byte[] htmlToText(HtmlInput input) {
-        JCas cas = null;
+        JCas cas;
         try {
             cas = JCasFactory.createJCas();
             cas.setDocumentText(input.getText());
@@ -65,7 +68,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,
                             PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, "./target/cache"
+                            PARAM_TARGET_LOCATION, PATH_TO_CACHE
                     );
 
             ab.add(html);
@@ -117,7 +120,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     AnalysisEngineFactory.createEngineDescription(
                             XmiWriter.class,
                             PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, "./target/cache"
+                            PARAM_TARGET_LOCATION, PATH_TO_CACHE
                     );
 
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
@@ -138,18 +141,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
     @Override
     public byte[] getTypeSystemFile() {
-        File file = new File("./target/cache/typesystem.xml");
+        File file = new File(PATH_TO_TYPESYSTEM);
         try (InputStream in = new FileInputStream(file)) {
             return IOUtils.toByteArray(in);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return new byte[0];
-    }
-
-    public void writeCasDumpToFile(JCas cas, String path, String view) throws FileNotFoundException, CASException {
-        try (PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
-            CasDumperReadable.dump(cas.getView(view), printWriter);
-        }
     }
 }

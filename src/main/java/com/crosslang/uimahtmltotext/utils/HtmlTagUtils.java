@@ -15,21 +15,6 @@ public class HtmlTagUtils {
     private HtmlTagUtils() {
     }
 
-    public static String getOpeningTag(HtmlTag tag) {
-        if (tag.getAttributes() != null) {
-            if (tag.getAttributes().size() > 0) {
-                return "<" + tag.getTagName() + " " + tag.getAttributes().toString() + ">";
-            }
-        } else {
-            return "<"+tag.getTagName()+">";
-        }
-        return null;
-    }
-
-    public static String getClosingTag(HtmlTag tag) {
-        return "</"+tag.getTagName()+">";
-    }
-
     public static Optional<HtmlTag> getLastObjectByTagType(List<HtmlTag> openedList, HtmlTag endTag) {
         return IntStream.range(0, openedList.size()).mapToObj(i -> openedList.get(openedList.size() - i - 1))
                 .filter(Objects::nonNull)
