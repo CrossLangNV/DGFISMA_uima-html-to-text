@@ -35,7 +35,6 @@ public class MainController {
     @PostMapping(value = "/text2html", produces = { "application/xml", "text/xml" })
     @ResponseBody
     public byte[] text2html(@RequestBody HtmlInput input) {
-        logger.info(String.format("INPUT: %s", input));
         return uimaTextTransferService.textToHtml(input);
     }
 }

@@ -78,7 +78,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AnalysisEngineDescription aed = ab.createAggregateDescription();
 
             SimplePipeline.runPipeline(cas, aed);
-            CasDumperReadable.dump(cas);
+            //CasDumperReadable.dump(cas);
 
             File file = new File(PATH_TO_XMI);
             InputStream in = new FileInputStream(file);
@@ -124,7 +124,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     );
 
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
-            ab.add(aedDump);
+            //ab.add(aedDump);
             ab.add(xmiWriter);
 
             AnalysisEngineDescription aed = ab.createAggregateDescription();
