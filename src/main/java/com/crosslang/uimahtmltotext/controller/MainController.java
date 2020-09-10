@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
-    public static final Logger log = LoggerFactory.getLogger(MainController.class);
+    public static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     private final UimaTextTransferService uimaTextTransferService;
 
@@ -35,6 +35,7 @@ public class MainController {
     @PostMapping(value = "/text2html", produces = { "application/xml", "text/xml" })
     @ResponseBody
     public byte[] text2html(@RequestBody HtmlInput input) {
+        logger.info(String.format("INPUT: %s", input));
         return uimaTextTransferService.textToHtml(input);
     }
 }
