@@ -1,8 +1,6 @@
 package com.crosslang.uimahtmltotext.service;
 
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
-import com.crosslang.sdk.utils.commons.CasDumperReadable;
-import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
@@ -78,13 +76,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             AnalysisEngineDescription aed = ab.createAggregateDescription();
 
             SimplePipeline.runPipeline(cas, aed);
-            //CasDumperReadable.dump(cas);
 
             File file = new File(PATH_TO_XMI);
             InputStream in = new FileInputStream(file);
             return IOUtils.toByteArray(in);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return new byte[0];
     }
@@ -108,7 +105,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             List<String> vbtts = Collections.singletonList(ValueBetweenTagType.class.getName());
 
             // Create aed's
-            AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
                     PARAM_TYPES_TO_COPY, types,
@@ -124,7 +120,6 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
                     );
 
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
-            //ab.add(aedDump);
             ab.add(xmiWriter);
 
             AnalysisEngineDescription aed = ab.createAggregateDescription();
@@ -134,7 +129,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             InputStream in = new FileInputStream(xmlFile);
             return IOUtils.toByteArray(in);
         } catch (UIMAException | IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return new byte[0];
     }
@@ -145,7 +140,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
         try (InputStream in = new FileInputStream(file)) {
             return IOUtils.toByteArray(in);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return new byte[0];
     }

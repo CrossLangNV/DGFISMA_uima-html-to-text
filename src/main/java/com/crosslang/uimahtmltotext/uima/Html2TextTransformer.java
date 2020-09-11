@@ -33,6 +33,7 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
 
     @Override
     public void process(JCas aInput, JCas aOutput) {
+        logger.info("Html2Text Transformer is processing... Document bytes: {}", aInput.getDocumentText().length());
         // Metadata for the XmiWriter
         DocumentMetaData metaData = DocumentMetaData.create(aInput);
         metaData.setDocumentId("docId");
@@ -76,12 +77,10 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
                 vbtt.addToIndexes();
 
                 htmlTagOpened.remove(lastTag);
-
             }
         }
 
         removeHtmlTagsFromCas(aInput);
-
     }
 
     public void removeHtmlTagsFromCas(JCas cas) {

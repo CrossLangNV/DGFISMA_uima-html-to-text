@@ -28,7 +28,7 @@ class UimaTextTransferServiceImplTest {
 
     @Test
     @DisplayName("Unit test: Typesystem")
-    void unitTestTypesystem() throws Exception {
+    void unitTestTypesystem() {
         byte[] typeSystemFile = uimaTextTransferService.getTypeSystemFile();
         MatcherAssert.assertThat(typeSystemFile.length, greaterThan(5));
     }

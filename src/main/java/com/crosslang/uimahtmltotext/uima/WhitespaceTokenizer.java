@@ -8,7 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Custom Whitespace Tokenizer which is very basic. Not in use anymore.
+ * Custom Whitespace Tokenizer which is very basic.
+ * Not in use anymore.
  */
 public class WhitespaceTokenizer extends JCasAnnotator_ImplBase {
     private static final Pattern whitespace = Pattern.compile("[ \n]+");

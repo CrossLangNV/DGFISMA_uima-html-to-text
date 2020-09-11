@@ -21,6 +21,7 @@ public class Text2HtmlTransformer extends JCasTransformer_ImplBase {
 
     @Override
     public void process(JCas aInput, JCas aOutput) throws AnalysisEngineProcessException {
+        logger.info("Text2Html Transformer is processing... Document bytes: {}", aInput.getDocumentText().length());
         Collection<ValueBetweenTagType> collection = JCasUtil.select(aInput, ValueBetweenTagType.class);
         List<ValueBetweenTagType> list = new ArrayList<>(collection);
 
