@@ -5,6 +5,9 @@ import java.util.Objects;
 public class HtmlInput {
     private String text;
 
+    public HtmlInput() {
+    }
+
     public HtmlInput(String text) {
         this.text = text;
     }
