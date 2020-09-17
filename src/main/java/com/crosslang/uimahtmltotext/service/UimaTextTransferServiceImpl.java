@@ -1,6 +1,8 @@
 package com.crosslang.uimahtmltotext.service;
 
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
+import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,6 +62,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
 
             // Create and add AED's
+            AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
             AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
             AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
@@ -72,6 +76,9 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
             ab.add(html);
             ab.add(aed1);
             ab.add(xmiWriter);
+            if (logger.isDebugEnabled()) {
+                ab.add(aedDump);
+            }
 
             AnalysisEngineDescription aed = ab.createAggregateDescription();
 
@@ -101,14 +108,13 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             AggregateBuilder ab = new AggregateBuilder();
 
-            List<String> types = Collections.singletonList(Tfidf.class.getName());
-            List<String> vbtts = Collections.singletonList(ValueBetweenTagType.class.getName());
+            List<String> types = Arrays.asList(Tfidf.class.getName(), ValueBetweenTagType.class.getName(), Sentence.class.getName());
 
             // Create aed's
+            AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
             AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
                     PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
                     PARAM_TYPES_TO_COPY, types,
-                    PARAM_TYPES_TO_COPY, vbtts,
                     PARAM_REMOVE_OVERLAPPING, false);
 
             // Write output to XMI to return to ResponseBody
@@ -121,6 +127,10 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
             ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
             ab.add(xmiWriter);
+
+            if (logger.isDebugEnabled()) {
+                ab.add(aedDump);
+            }
 
             AnalysisEngineDescription aed = ab.createAggregateDescription();
 
