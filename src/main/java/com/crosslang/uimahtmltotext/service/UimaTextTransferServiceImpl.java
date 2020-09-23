@@ -45,9 +45,9 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
     public static final Logger logger = LoggerFactory.getLogger(UimaTextTransferServiceImpl.class);
     static final String TARGET_VIEW_NAME = "html2textView";
     static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
-    static final String PATH_TO_XMI = "./target/cache/docId.xmi";
-    static final String PATH_TO_TYPESYSTEM = "./target/cache/typesystem.xml";
-    static final String PATH_TO_CACHE = "./target/cache";
+    static final String PATH_TO_XMI = System.getProperty("java.io.tmpdir")+"/docId.xmi";
+    static final String PATH_TO_TYPESYSTEM = System.getProperty("java.io.tmpdir")+"/typesystem.xml";
+    static final String PATH_TO_CACHE = System.getProperty("java.io.tmpdir");
 
     @Override
     public byte[] htmlToText(HtmlInput input) {
