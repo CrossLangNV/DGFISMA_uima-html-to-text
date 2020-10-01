@@ -23,6 +23,7 @@ import org.apache.uima.jcas.JCas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,116 +43,130 @@ import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDe
 
 @Service
 public class UimaTextTransferServiceImpl implements UimaTextTransferService {
-    public static final Logger logger = LoggerFactory.getLogger(UimaTextTransferServiceImpl.class);
-    static final String TARGET_VIEW_NAME = "html2textView";
-    static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
-    static final String PATH_TO_XMI = System.getProperty("java.io.tmpdir")+"/docId.xmi";
-    static final String PATH_TO_TYPESYSTEM = System.getProperty("java.io.tmpdir")+"/typesystem.xml";
-    static final String PATH_TO_CACHE = System.getProperty("java.io.tmpdir");
+	public static final Logger logger = LoggerFactory.getLogger(UimaTextTransferServiceImpl.class);
+	static final String TARGET_VIEW_NAME = "html2textView";
+	static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
+	static final String PATH_TO_XMI = System.getProperty("java.io.tmpdir") + "/docId.xmi";
+	static final String PATH_TO_TYPESYSTEM = System.getProperty("java.io.tmpdir") + "/typesystem.xml";
+	static final String PATH_TO_CACHE = System.getProperty("java.io.tmpdir");
 
-    @Override
-    public byte[] htmlToText(HtmlInput input) {
-        JCas cas;
-        try {
-            cas = JCasFactory.createJCas();
-            cas.setDocumentText(input.getText());
-            cas.setDocumentLanguage("en");
+	@Override
+	public byte[] htmlToText(HtmlInput input) {
+		JCas cas;
+		try {
+			logger.info("Got text: " + input.getText());
+			cas = JCasFactory.createJCas();
+			cas.setDocumentText(input.getText());
+			cas.setDocumentLanguage("en");
 
-            AggregateBuilder ab = new AggregateBuilder();
+			AggregateBuilder ab = new AggregateBuilder();
 
-            List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
+			List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
 
-            // Create and add AED's
-            AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-            AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
-            AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
-            AnalysisEngineDescription xmiWriter =
-                    AnalysisEngineFactory.createEngineDescription(
-                            XmiWriter.class,
-                            PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, PATH_TO_CACHE
-                    );
+			// Create and add AED's
+			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
+			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
+			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
+					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
+			AnalysisEngineDescription xmiWriter = AnalysisEngineFactory.createEngineDescription(XmiWriter.class,
+					PARAM_OVERWRITE, true, PARAM_TARGET_LOCATION, PATH_TO_CACHE);
 
-            ab.add(html);
-            ab.add(aed1);
-            ab.add(xmiWriter);
-            if (logger.isDebugEnabled()) {
-                ab.add(aedDump);
-            }
+			ab.add(html);
+			ab.add(aed1);
+			ab.add(xmiWriter);
+			if (logger.isDebugEnabled()) {
+				ab.add(aedDump);
+			}
 
-            AnalysisEngineDescription aed = ab.createAggregateDescription();
+			AnalysisEngineDescription aed = ab.createAggregateDescription();
 
-            SimplePipeline.runPipeline(cas, aed);
+			SimplePipeline.runPipeline(cas, aed);
 
-            File file = new File(PATH_TO_XMI);
-            InputStream in = new FileInputStream(file);
-            return IOUtils.toByteArray(in);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return new byte[0];
-    }
+			File file = new File(PATH_TO_XMI);
+			InputStream in = new FileInputStream(file);
+			return IOUtils.toByteArray(in);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return new byte[0];
+	}
 
-    @Override
-    public byte[] textToHtml(HtmlInput input) {
-        try {
-            // Write output to XMI
-            Files.write(Paths.get(PATH_TO_XMI), input.getText().getBytes());
-            File xmlFile = new File(PATH_TO_XMI);
+	@Override
+	public byte[] textToHtml(HtmlInput input) {
+		try {
+			logger.info("Got text: " + input.getText());
+			// Write output to XMI
+			Files.write(Paths.get(PATH_TO_XMI), input.getText().getBytes());
+			File xmlFile = new File(PATH_TO_XMI);
 
-            // Read XMI
-            CollectionReaderDescription description = createReaderDescription(
-                    XmiReader.class,
-                    PARAM_SOURCE_LOCATION, xmlFile
-            );
+			// Read XMI
+			CollectionReaderDescription description = createReaderDescription(XmiReader.class, PARAM_SOURCE_LOCATION,
+					xmlFile);
 
-            AggregateBuilder ab = new AggregateBuilder();
+			AggregateBuilder ab = new AggregateBuilder();
 
-            List<String> types = Arrays.asList(Tfidf.class.getName(), ValueBetweenTagType.class.getName(), Sentence.class.getName());
+			List<String> types = Arrays.asList(Tfidf.class.getName(), ValueBetweenTagType.class.getName(),
+					Sentence.class.getName());
 
-            // Create aed's
-            AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-            AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(Text2HtmlTransformer.class,
-                    PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME,
-                    PARAM_TYPES_TO_COPY, types,
-                    PARAM_REMOVE_OVERLAPPING, false);
+			// Create aed's
+			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
+			AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(
+					Text2HtmlTransformer.class, PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME, PARAM_TYPES_TO_COPY, types,
+					PARAM_REMOVE_OVERLAPPING, false);
 
-            // Write output to XMI to return to ResponseBody
-            AnalysisEngineDescription xmiWriter =
-                    AnalysisEngineFactory.createEngineDescription(
-                            XmiWriter.class,
-                            PARAM_OVERWRITE, true,
-                            PARAM_TARGET_LOCATION, PATH_TO_CACHE
-                    );
+			// Write output to XMI to return to ResponseBody
+			AnalysisEngineDescription xmiWriter = AnalysisEngineFactory.createEngineDescription(XmiWriter.class,
+					PARAM_OVERWRITE, true, PARAM_TARGET_LOCATION, PATH_TO_CACHE);
 
-            ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
-            ab.add(xmiWriter);
+			ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
+			ab.add(xmiWriter);
 
-            if (logger.isDebugEnabled()) {
-                ab.add(aedDump);
-            }
+			if (logger.isDebugEnabled()) {
+				ab.add(aedDump);
+			}
 
-            AnalysisEngineDescription aed = ab.createAggregateDescription();
+			AnalysisEngineDescription aed = ab.createAggregateDescription();
 
-            SimplePipeline.runPipeline(description, aed);
+			SimplePipeline.runPipeline(description, aed);
 
-            InputStream in = new FileInputStream(xmlFile);
-            return IOUtils.toByteArray(in);
-        } catch (UIMAException | IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        return new byte[0];
-    }
+			InputStream in = new FileInputStream(xmlFile);
+			return IOUtils.toByteArray(in);
+		} catch (UIMAException | IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return new byte[0];
+	}
 
-    @Override
-    public byte[] getTypeSystemFile() {
-        File file = new File(PATH_TO_TYPESYSTEM);
-        try (InputStream in = new FileInputStream(file)) {
-            return IOUtils.toByteArray(in);
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        return new byte[0];
-    }
+	@Override
+	public byte[] getTypeSystemFile() {
+		File file = new File(PATH_TO_TYPESYSTEM);
+		try (InputStream in = new FileInputStream(file)) {
+			return IOUtils.toByteArray(in);
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
+		return new byte[0];
+	}
+
+	@Override
+	public byte[] htmlToText(MultipartFile documentFile) {
+		HtmlInput in = new HtmlInput();
+		try {
+			in.setText(new String(documentFile.getBytes()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return htmlToText(in);
+	}
+
+	@Override
+	public byte[] textToHtml(MultipartFile documentFile) {
+		HtmlInput in = new HtmlInput();
+		try {
+			in.setText(new String(documentFile.getBytes()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return textToHtml(in);
+	}
 }

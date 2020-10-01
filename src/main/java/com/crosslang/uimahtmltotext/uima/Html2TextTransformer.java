@@ -1,6 +1,5 @@
 package com.crosslang.uimahtmltotext.uima;
 
-import com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase;
 import com.crosslang.sdk.types.html.HtmlTag;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import com.crosslang.uimahtmltotext.utils.HtmlTagUtils;
@@ -81,10 +80,12 @@ public class Html2TextTransformer extends JCasTransformer_ImplBase {
         }
 
         removeHtmlTagsFromCas(aInput);
+        logger.info("Html2Text Transformer is DONE");
     }
 
     public void removeHtmlTagsFromCas(JCas cas) {
         for (HtmlTag s : JCasUtil.select(cas, HtmlTag.class)) {
+        	logger.info("Removed html tag: " + s.getTagName());
             delete(s.getBegin(), s.getEnd());
         }
     }
