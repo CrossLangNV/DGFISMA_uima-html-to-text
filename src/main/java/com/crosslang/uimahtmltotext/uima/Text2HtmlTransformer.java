@@ -1,6 +1,5 @@
 package com.crosslang.uimahtmltotext.uima;
 
-import com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase;
 import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.fit.util.JCasUtil;

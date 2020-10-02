@@ -1,15 +1,22 @@
 package com.crosslang.uimahtmltotext.service;
 
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
-import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
-import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
-import com.crosslang.uimahtmltotext.model.HtmlInput;
-import com.crosslang.uimahtmltotext.uima.Html2TextTransformer;
-import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
-import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
-import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
-import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiReader;
-import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiWriter;
+import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_REMOVE_OVERLAPPING;
+import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TARGET_VIEW_NAME;
+import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TYPES_TO_COPY;
+import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_OVERWRITE;
+import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_TARGET_LOCATION;
+import static de.tudarmstadt.ukp.dkpro.core.api.io.ResourceCollectionReaderBase.PARAM_SOURCE_LOCATION;
+import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
@@ -25,21 +32,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
+import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
+import com.crosslang.uimahtmltotext.model.HtmlInput;
+import com.crosslang.uimahtmltotext.uima.Html2TextAnnotator;
+import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
+import com.crosslang.uimahtmltotext.uima.type.ValueBetweenTagType;
 
-import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.*;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_OVERWRITE;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_TARGET_LOCATION;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.ResourceCollectionReaderBase.PARAM_SOURCE_LOCATION;
-import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
+import de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf;
+import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
+import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiReader;
+import de.tudarmstadt.ukp.dkpro.core.io.xmi.XmiWriter;
 
 @Service
 public class UimaTextTransferServiceImpl implements UimaTextTransferService {
@@ -61,13 +64,12 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 			AggregateBuilder ab = new AggregateBuilder();
 
-			List<String> types = Collections.singletonList(ValueBetweenTagType.class.getName());
-
 			// Create and add AED's
 			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
 			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
-			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextTransformer.class,
-					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME, PARAM_TYPES_TO_COPY, types);
+			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextAnnotator.class,
+					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
+
 			AnalysisEngineDescription xmiWriter = AnalysisEngineFactory.createEngineDescription(XmiWriter.class,
 					PARAM_OVERWRITE, true, PARAM_TARGET_LOCATION, PATH_TO_CACHE);
 
