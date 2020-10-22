@@ -50,7 +50,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 	static final String TARGET_VIEW_NAME = "html2textView";
 	static final String TEXT2HTML_VIEW_NAME = "text2htmlView";
 	static final String PATH_TO_XMI = System.getProperty("java.io.tmpdir") + "/docId.xmi";
-	static final String PATH_TO_TYPESYSTEM = System.getProperty("java.io.tmpdir") + "/typesystem.xml";
+	static final String PATH_TO_TYPESYSTEM = "typesystem.xml";
 	static final String PATH_TO_CACHE = System.getProperty("java.io.tmpdir");
 
 	@Override
@@ -141,9 +141,8 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 	@Override
 	public byte[] getTypeSystemFile() {
-		File file = new File(PATH_TO_TYPESYSTEM);
-		try (InputStream in = new FileInputStream(file)) {
-			return IOUtils.toByteArray(in);
+		try(InputStream is = getClass().getClassLoader().getResourceAsStream(PATH_TO_TYPESYSTEM)) {
+			return IOUtils.toByteArray(is);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}
