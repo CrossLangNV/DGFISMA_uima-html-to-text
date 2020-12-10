@@ -82,9 +82,8 @@ public class Html2TextAnnotator extends JCasAnnotator_ImplBase {
 					htmlTagOpened.remove(lastTag);
 				}
 			}
-			// FIXME: should we remove HtmlTag annotations from the cas ?
-			// does the NLP pipeline require them ?
-//			removeHtmlTagsFromCas(cas);
+			// Remove HtmlTag annotations from the CAS, NLP pipeline does not require them
+			removeHtmlTagsFromCas(cas);
 
 		} catch (CASException e) {
 			// TODO Auto-generated catch block

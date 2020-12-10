@@ -36,7 +36,11 @@ public class MainController {
 	@PostMapping(value = "/html2textdoc", produces = { "application/xml", "text/xml" })
 	@ResponseBody
 	public byte[] html2textDoc(@RequestParam(value = "document") MultipartFile documentFile) {
-		return uimaTextTransferService.htmlToText(documentFile);
+		long startTime = System.nanoTime();
+		byte[] bytes = uimaTextTransferService.htmlToText(documentFile);
+		long endTime = System.nanoTime();
+		logger.info("Took: {}ms", (endTime - startTime) / 1000000);
+		return bytes;
 	}
 
 	@GetMapping(value = "/html2text/typesystem", produces = { "application/xml", "text/xml" })
@@ -50,6 +54,7 @@ public class MainController {
 	public byte[] text2html(@RequestBody HtmlInput input) {
 		return uimaTextTransferService.textToHtml(input);
 	}
+
 	@PostMapping(value = "/text2htmldoc", produces = { "application/xml", "text/xml" })
 	@ResponseBody
 	public byte[] text2htmlDoc(@RequestParam(value = "document") MultipartFile documentFile) {

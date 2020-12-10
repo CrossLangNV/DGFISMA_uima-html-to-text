@@ -57,7 +57,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 	public byte[] htmlToText(HtmlInput input) {
 		JCas cas;
 		try {
-			logger.info("Got text: " + input.getText());
+			logger.debug("Got text: " + input.getText());
 			cas = JCasFactory.createJCas();
 			cas.setDocumentText(input.getText());
 			cas.setDocumentLanguage("en");
@@ -66,7 +66,10 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 			// Create and add AED's
 			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class);
+
+			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class,
+					HtmlAnnotator.PARAM_WRITE_ATTRIBUTES, false);
+
 			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextAnnotator.class,
 					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
 
@@ -141,7 +144,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 	@Override
 	public byte[] getTypeSystemFile() {
-		try(InputStream is = getClass().getClassLoader().getResourceAsStream(PATH_TO_TYPESYSTEM)) {
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream(PATH_TO_TYPESYSTEM)) {
 			return IOUtils.toByteArray(is);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
