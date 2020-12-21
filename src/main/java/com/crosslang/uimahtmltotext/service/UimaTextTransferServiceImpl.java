@@ -8,6 +8,7 @@ import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM
 import static de.tudarmstadt.ukp.dkpro.core.api.io.ResourceCollectionReaderBase.PARAM_SOURCE_LOCATION;
 import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.cas.CAS;
+import org.apache.uima.cas.impl.XmiCasSerializer;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
@@ -66,30 +68,25 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 			// Create and add AED's
 			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
-
 			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class,
 					HtmlAnnotator.PARAM_WRITE_ATTRIBUTES, false);
-
 			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextAnnotator.class,
 					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
 
-			AnalysisEngineDescription xmiWriter = AnalysisEngineFactory.createEngineDescription(XmiWriter.class,
-					PARAM_OVERWRITE, true, PARAM_TARGET_LOCATION, PATH_TO_CACHE);
-
 			ab.add(html);
 			ab.add(aed1);
-			ab.add(xmiWriter);
+
 			if (logger.isDebugEnabled()) {
 				ab.add(aedDump);
 			}
 
-			AnalysisEngineDescription aed = ab.createAggregateDescription();
+			SimplePipeline.runPipeline(cas, ab.createAggregateDescription());
 
-			SimplePipeline.runPipeline(cas, aed);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            XmiCasSerializer.serialize(cas.getCas(), baos);
+           
+            return baos.toByteArray();
 
-			File file = new File(PATH_TO_XMI);
-			InputStream in = new FileInputStream(file);
-			return IOUtils.toByteArray(in);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -100,7 +97,9 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 	public byte[] textToHtml(HtmlInput input) {
 		try {
 			logger.info("Got text: " + input.getText());
+
 			// Write output to XMI
+			// FIXME: not thread-safe!
 			Files.write(Paths.get(PATH_TO_XMI), input.getText().getBytes());
 			File xmlFile = new File(PATH_TO_XMI);
 

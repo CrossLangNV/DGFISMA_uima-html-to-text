@@ -30,7 +30,11 @@ public class MainController {
 	@PostMapping(value = "/html2text", produces = { "application/xml", "text/xml" })
 	@ResponseBody
 	public byte[] html2text(@RequestBody HtmlInput input) {
-		return uimaTextTransferService.htmlToText(input);
+		long startTime = System.nanoTime();
+		byte[] bytes = uimaTextTransferService.htmlToText(input);
+		long endTime = System.nanoTime();
+		logger.info("Took: {}ms", (endTime - startTime) / 1000000);
+		return bytes;
 	}
 
 	@PostMapping(value = "/html2textdoc", produces = { "application/xml", "text/xml" })

@@ -39,12 +39,6 @@ public class Html2TextAnnotator extends JCasAnnotator_ImplBase {
 	@Override
 	public void process(JCas cas) throws AnalysisEngineProcessException {
 		try {
-			// Metadata for the XmiWriter
-			DocumentMetaData metaData = DocumentMetaData.create(cas);
-			metaData.setDocumentId("docId");
-			metaData.setDocumentTitle("docTitle");
-			metaData.setCollectionId("colId");
-			metaData.addToIndexes();
 
 			StringManipulator sm = new StringManipulator(cas.getDocumentText());
 
