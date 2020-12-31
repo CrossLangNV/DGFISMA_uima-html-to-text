@@ -61,7 +61,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 		try {
 			logger.debug("Got text: " + input.getText());
 			cas = JCasFactory.createJCas();
-			cas.setDocumentText(input.getText());
+			cas.setDocumentText(clean(input.getText()));
 			cas.setDocumentLanguage("en");
 
 			AggregateBuilder ab = new AggregateBuilder();
@@ -91,6 +91,9 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 			logger.error(e.getMessage(), e);
 		}
 		return new byte[0];
+	}
+  private String clean(String text) {
+		return text.replaceAll("\\h"," ");
 	}
 
 	@Override
