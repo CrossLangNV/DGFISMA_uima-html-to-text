@@ -66,10 +66,16 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 
 			AggregateBuilder ab = new AggregateBuilder();
 
+			boolean showAttributes = false;
+
+			if (input.getAttributes()) {
+				showAttributes = true;
+			}
+
 			// Create and add AED's
 			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
 			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class,
-					HtmlAnnotator.PARAM_WRITE_ATTRIBUTES, false);
+					HtmlAnnotator.PARAM_WRITE_ATTRIBUTES, showAttributes);
 			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextAnnotator.class,
 					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
 

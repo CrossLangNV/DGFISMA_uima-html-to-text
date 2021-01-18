@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class HtmlInput {
     private String text;
+    private boolean attributes;
 
     public HtmlInput() {
     }
@@ -20,10 +21,19 @@ public class HtmlInput {
         this.text = text;
     }
 
+    public boolean getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(boolean attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public String toString() {
         return "HtmlInput{" +
                 "text='" + text + '\'' +
+                ", attributes=" + attributes +
                 '}';
     }
 
@@ -32,11 +42,11 @@ public class HtmlInput {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HtmlInput htmlInput = (HtmlInput) o;
-        return Objects.equals(text, htmlInput.text);
+        return attributes == htmlInput.attributes && Objects.equals(text, htmlInput.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(text);
+        return Objects.hash(text, attributes);
     }
 }
