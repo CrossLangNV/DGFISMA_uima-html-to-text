@@ -48,6 +48,38 @@
             </features>
         </typeDescription>
         <typeDescription>
+            <name>cassis.Token_user</name>
+            <description/>
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+            <features>
+                <featureDescription>
+                    <name>id</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>pos</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>user</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>role</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>datetime</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+            </features>
+        </typeDescription>
+        <typeDescription>
             <name>com.crosslang.sdk.types.classification.AllCapsWord</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
@@ -1334,6 +1366,38 @@
             </features>
         </typeDescription>
         <typeDescription>
+            <name>de.tudarmstadt.ukp.dkpro.core.api.frequency.tfidf.type.Tfidf_user</name>
+            <description/>
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+            <features>
+                <featureDescription>
+                    <name>tfidfValue</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.Double</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>term</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>user</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>role</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>datetime</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+            </features>
+        </typeDescription>
+        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.morph.Morpheme</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
@@ -1440,11 +1504,6 @@
                     <description/>
                     <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
-                <featureDescription>
-                    <name>transitivity</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
             </features>
         </typeDescription>
         <typeDescription>
@@ -1457,97 +1516,7 @@
                     <description/>
                     <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
-                <featureDescription>
-                    <name>coarseValue</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
             </features>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_ADJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_ADP</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_ADV</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_AUX</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_CONJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_DET</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_INTJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_NOUN</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_NUM</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_PART</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_PRON</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_PROPN</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_PUNCT</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_SCONJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_SYM</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_VERB</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
         <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PP</name>
@@ -1556,16 +1525,6 @@
         </typeDescription>
         <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PR</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PRON</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PROPN</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
@@ -1580,74 +1539,9 @@
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PUNCT</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.SCONJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.SYM</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.V</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.VERB</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.X</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_AT</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_DM</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_EMO</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_HASH</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_INT</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_NNV</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_NOUN</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_NPV</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_NOUN</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.tweet.POS_URL</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS_X</supertypeName>
         </typeDescription>
         <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData</name>
@@ -1735,36 +1629,6 @@
                     <description/>
                     <rangeTypeName>uima.cas.FSArray</rangeTypeName>
                     <elementType>de.tudarmstadt.ukp.dkpro.core.api.metadata.type.TagDescription</elementType>
-                </featureDescription>
-                <featureDescription>
-                    <name>componentName</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>modelLocation</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>modelVariant</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>modelLanguage</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>modelVersion</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>input</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.Boolean</rangeTypeName>
                 </featureDescription>
             </features>
         </typeDescription>
@@ -1908,12 +1772,27 @@
             </features>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.LexicalPhrase</name>
+            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma_user</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
             <features>
                 <featureDescription>
-                    <name>text</name>
+                    <name>value</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>user</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>role</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>datetime</name>
                     <description/>
                     <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
@@ -1937,12 +1816,61 @@
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Div</supertypeName>
         </typeDescription>
         <typeDescription>
+            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Paragraph_user</name>
+            <description/>
+            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Div</supertypeName>
+            <features>
+                <featureDescription>
+                    <name>user</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>role</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>datetime</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+            </features>
+        </typeDescription>
+        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
             <features>
                 <featureDescription>
                     <name>id</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+            </features>
+        </typeDescription>
+        <typeDescription>
+            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence_user</name>
+            <description/>
+            <supertypeName>uima.tcas.Annotation</supertypeName>
+            <features>
+                <featureDescription>
+                    <name>id</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>user</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>role</name>
+                    <description/>
+                    <rangeTypeName>uima.cas.String</rangeTypeName>
+                </featureDescription>
+                <featureDescription>
+                    <name>datetime</name>
                     <description/>
                     <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
@@ -1979,18 +1907,6 @@
             <supertypeName>uima.tcas.Annotation</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.SurfaceForm</name>
-            <description/>
-            <supertypeName>uima.tcas.Annotation</supertypeName>
-            <features>
-                <featureDescription>
-                    <name>value</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-            </features>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token</name>
             <description/>
             <supertypeName>uima.tcas.Annotation</supertypeName>
@@ -2022,33 +1938,6 @@
                 </featureDescription>
                 <featureDescription>
                     <name>id</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>form</name>
-                    <description/>
-                    <rangeTypeName>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.TokenForm</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>syntacticFunction</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.String</rangeTypeName>
-                </featureDescription>
-                <featureDescription>
-                    <name>order</name>
-                    <description/>
-                    <rangeTypeName>uima.cas.Integer</rangeTypeName>
-                </featureDescription>
-            </features>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.TokenForm</name>
-            <description/>
-            <supertypeName>uima.tcas.Annotation</supertypeName>
-            <features>
-                <featureDescription>
-                    <name>value</name>
                     <description/>
                     <rangeTypeName>uima.cas.String</rangeTypeName>
                 </featureDescription>
@@ -2552,22 +2441,12 @@
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.ADP</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.ADV</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
         <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.ART</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.AUX</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
@@ -2582,16 +2461,6 @@
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.DET</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.INTJ</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.N</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
@@ -2602,27 +2471,12 @@
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.N</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.NOUN</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.NP</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.N</supertypeName>
         </typeDescription>
         <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.NUM</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
             <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.O</name>
-            <description/>
-            <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
-        </typeDescription>
-        <typeDescription>
-            <name>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.PART</name>
             <description/>
             <supertypeName>de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS</supertypeName>
         </typeDescription>
