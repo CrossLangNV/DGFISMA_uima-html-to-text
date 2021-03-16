@@ -202,7 +202,7 @@ public abstract class JCasTransformer_ImplBase extends JCasAnnotator_ImplBase {
 			case REPLACE:
 				Interval i = alignedString.inverseResolve(new ImmutableInterval(change.getStart(), change.getEnd()));
 				ProtectedSequence ps = new ProtectedSequence(jcas, i.getStart(), i.getEnd());
-				ps.setId(change.getId());
+				ps.setId(Integer.toString(change.getId()));
 				ps.setSource(change.getOldText());
 				ps.setTarget(change.getOldText());
 				ps.setName(change.getName());
