@@ -39,7 +39,6 @@ import org.apache.uima.util.CasCopier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.crosslang.sdk.utils.commons.CasDumperReadable;
 import com.crosslang.uima.type.ProtectedSequence;
 
 import de.tudarmstadt.ukp.dkpro.core.api.metadata.type.DocumentMetaData;
@@ -155,7 +154,6 @@ public abstract class JCasTransformer_ImplBase extends JCasAnnotator_ImplBase {
 					Change change2 = changes.get(j);
 					if (change1.overlaps(change2)) {
 						if (log.isTraceEnabled()) {
-							CasDumperReadable.dump(cas);
 							log.trace("Change {} must not overlap with {}", change1, change2);
 						}
 						if (removeOverlapping) {

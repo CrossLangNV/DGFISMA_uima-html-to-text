@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<typeSystemDescription xmlns="http://uima.apache.org/resourceSpecifier">
+
+	<name>Annotation for HTML tags</name>
+
+	<description></description>
+
+	<version>1.0</version>
+
+	<vendor>CrossLang NV</vendor>
+
+	<types>
+		<typeDescription>
+			<name>com.crosslang.sdk.types.html.HtmlTag
+			</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>tagName</name>
+					<description>enclosing tag name</description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>tagRole</name>
+					<description></description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>attributes</name>
+					<description />
+					<rangeTypeName>uima.cas.FSArray</rangeTypeName>
+					<elementType>com.crosslang.sdk.types.html.TagAttribute
+					</elementType>
+				</featureDescription>
+			</features>
+		</typeDescription>
+
+		<typeDescription>
+			<name>com.crosslang.sdk.types.html.TagAttribute
+			</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>name</name>
+					<description></description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+				<featureDescription>
+					<name>value</name>
+					<description></description>
+					<rangeTypeName>uima.cas.String</rangeTypeName>
+				</featureDescription>
+			</features>
+		</typeDescription>
+
+		<typeDescription>
+			<name>com.crosslang.sdk.types.html.HtmlTaggedContent
+			</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features>
+				<featureDescription>
+					<name>htmlTag</name>
+					<description>the original html tag</description>
+					<rangeTypeName>com.crosslang.sdk.types.html.HtmlTag
+					</rangeTypeName>
+				</featureDescription>
+			</features>
+		</typeDescription>
+
+		<typeDescription>
+			<name>com.crosslang.sdk.types.html.InvalidHtml
+			</name>
+			<description />
+			<supertypeName>uima.tcas.Annotation</supertypeName>
+			<features></features>
+		</typeDescription>
+	</types>
+</typeSystemDescription>

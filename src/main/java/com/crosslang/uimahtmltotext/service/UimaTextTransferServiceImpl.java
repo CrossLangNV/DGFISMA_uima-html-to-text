@@ -1,12 +1,5 @@
 package com.crosslang.uimahtmltotext.service;
 
-import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_REMOVE_OVERLAPPING;
-import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TARGET_VIEW_NAME;
-import static com.crosslang.sdk.transfer.ae.model.tag.handler.JCasTransformer_ImplBase.PARAM_TYPES_TO_COPY;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_OVERWRITE;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.JCasFileWriter_ImplBase.PARAM_TARGET_LOCATION;
-import static de.tudarmstadt.ukp.dkpro.core.api.io.ResourceCollectionReaderBase.PARAM_SOURCE_LOCATION;
-import static org.apache.uima.fit.factory.CollectionReaderFactory.createReaderDescription;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -26,6 +19,7 @@ import org.apache.uima.cas.impl.XmiCasSerializer;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
+import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.apache.uima.jcas.JCas;
@@ -35,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.crosslang.sdk.segmentation.ae.html.annotator.HtmlAnnotator;
-import com.crosslang.sdk.utils.commons.CasDumperReadableAnnotator;
 import com.crosslang.uimahtmltotext.model.HtmlInput;
 import com.crosslang.uimahtmltotext.uima.Html2TextAnnotator;
 import com.crosslang.uimahtmltotext.uima.Text2HtmlTransformer;
@@ -73,18 +66,13 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 			}
 
 			// Create and add AED's
-			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
 			AnalysisEngineDescription html = AnalysisEngineFactory.createEngineDescription(HtmlAnnotator.class,
 					HtmlAnnotator.PARAM_WRITE_ATTRIBUTES, showAttributes);
 			AnalysisEngineDescription aed1 = AnalysisEngineFactory.createEngineDescription(Html2TextAnnotator.class,
-					PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
+					Html2TextAnnotator.PARAM_TARGET_VIEW_NAME, TARGET_VIEW_NAME);
 
 			ab.add(html);
 			ab.add(aed1);
-
-			if (logger.isDebugEnabled()) {
-				ab.add(aedDump);
-			}
 
 			SimplePipeline.runPipeline(cas, ab.createAggregateDescription());
 
@@ -113,7 +101,7 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 			File xmlFile = new File(PATH_TO_XMI);
 
 			// Read XMI
-			CollectionReaderDescription description = createReaderDescription(XmiReader.class, PARAM_SOURCE_LOCATION,
+			CollectionReaderDescription description = CollectionReaderFactory.createReaderDescription(XmiReader.class, XmiReader.PARAM_SOURCE_LOCATION,
 					xmlFile);
 
 			AggregateBuilder ab = new AggregateBuilder();
@@ -122,21 +110,16 @@ public class UimaTextTransferServiceImpl implements UimaTextTransferService {
 					Sentence.class.getName());
 
 			// Create aed's
-			AnalysisEngineDescription aedDump = CasDumperReadableAnnotator.create();
 			AnalysisEngineDescription text2htmlTransformer = AnalysisEngineFactory.createEngineDescription(
-					Text2HtmlTransformer.class, PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME, PARAM_TYPES_TO_COPY, types,
-					PARAM_REMOVE_OVERLAPPING, false);
+					Text2HtmlTransformer.class, Text2HtmlTransformer.PARAM_TARGET_VIEW_NAME, TEXT2HTML_VIEW_NAME, Text2HtmlTransformer.PARAM_TYPES_TO_COPY, types,
+					Text2HtmlTransformer.PARAM_REMOVE_OVERLAPPING, false);
 
 			// Write output to XMI to return to ResponseBody
 			AnalysisEngineDescription xmiWriter = AnalysisEngineFactory.createEngineDescription(XmiWriter.class,
-					PARAM_OVERWRITE, true, PARAM_TARGET_LOCATION, PATH_TO_CACHE);
+					XmiWriter.PARAM_OVERWRITE, true, XmiWriter.PARAM_TARGET_LOCATION, PATH_TO_CACHE);
 
 			ab.add(text2htmlTransformer, CAS.NAME_DEFAULT_SOFA, TARGET_VIEW_NAME);
 			ab.add(xmiWriter);
-
-			if (logger.isDebugEnabled()) {
-				ab.add(aedDump);
-			}
 
 			AnalysisEngineDescription aed = ab.createAggregateDescription();
 

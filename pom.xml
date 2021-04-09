@@ -46,21 +46,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.crosslang.sdk</groupId>
-			<artifactId>segmentation-ae-html-annotator</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.crosslang.sdk</groupId>
-			<artifactId>segmentation-ae-html-filter</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.crosslang.sdk</groupId>
-			<artifactId>transfer-ae-model-named-entity-handler</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
 			<artifactId>de.tudarmstadt.ukp.dkpro.core.io.xmi-asl</artifactId>
 			<version>1.8.0</version>
@@ -76,6 +61,11 @@
 			<version>1.8.0</version>
 		</dependency>
 		<dependency>
+			<groupId>de.tudarmstadt.ukp.dkpro.core</groupId>
+			<artifactId>de.tudarmstadt.ukp.dkpro.core.frequency-asl</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.dkpro.core</groupId>
 			<artifactId>dkpro-core-tokit-asl</artifactId>
 			<version>1.12.0</version>
@@ -85,7 +75,18 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.htmlparser.jericho</groupId>
+			<artifactId>jericho-html</artifactId>
+			<version>3.4</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -107,6 +108,8 @@
 						<configuration>
 							<typeSystemIncludes>
 								<typeSystemInclude>src/main/resources/com/crosslang/uimahtmltotext/uima/types/*.xml</typeSystemInclude>
+								<typeSystemInclude>src/main/resources/com/crosslang/sdk/types/html/*.xml</typeSystemInclude>
+								<typeSystemInclude>src/main/resources/com/crosslang/protectedsequences/*.xml</typeSystemInclude>
 							</typeSystemIncludes>
 							<limitToProject>false</limitToProject>
 						</configuration>
